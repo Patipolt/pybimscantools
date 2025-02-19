@@ -159,7 +159,7 @@ python.exe -m pip install pybimscantools
 ##### OR
 ##### 2.2 Packaging the pybimscantools as a package and install its wheel
 
-Since all these files `requirements.txt` `setup.py` `MANIFEST.in` `pyproject.toml` required for packaging a wheel are provided, you can package pybimscantools by runnning:
+Since all these files `requirements.txt` `setup.py` `MANIFEST.in` `pyproject.toml` required for packaging a wheel are provided, you can package pybimscantools by running below command in the project folder `pybimscantools`.
 
 ```
 python.exe setup.py sdist bdist_wheel
@@ -170,7 +170,7 @@ This will create a `dist/` folder containing a `.whl` file and a `.tar.gz` sourc
 Install the wheel using pip:
 
 ```
-python.exe -m pip install dist/your_project_name-0.1-py3-none-any.whl
+python.exe -m pip install dist/pybimscantools-0.1-py3-none-any.whl
 ```
 ------------------------------------------------------------------------
 
@@ -178,12 +178,12 @@ python.exe -m pip install dist/your_project_name-0.1-py3-none-any.whl
 
 Once you have set up the environment ready for the software, there are some requirements below in order to use `pybimscantools` at its fully functioning state. After that, you can follow the steps in `test.py`.
 
-#### Data
+### Data
 
-There is provided data available for download at: https://drive.google.com/file/d/1grP0Z4clZl_oQCnKoO2acsktXPuv4ntW/view?usp=sharing.
+There is provided data available for download at: https://drive.google.com/file/d/1X82WFLAPbr41ybdGQwJHutIHWmgMMlVG/view?usp=sharing.
 This provided data is processed by `pybimscantools` as an example to demonstrate automated data acquisition and its pre-processing pipeline. The users are required to change data in order to perform automated data acquisition and its related pre-processing tasks of their projects.
 
-#### Folder Structure
+### Folder Structure
 
 Make sure that the downloaded zipped `Data` folder is extracted and located within the same root as the software. Basically move it to the same root as `pybimscantools`.
 
@@ -225,13 +225,13 @@ Data/
 │   ├── models/
 │   |   ├── ifc/
 │   |   |    ├── ....ifc* (ifc file of your site)
-│   ├── pointclouds/
+│   ├── pointclouds*/
 │   ├── points_for_transformation.xlsx* (transformation between 2 coordinates)
 ```
 
-#### Required Programs and Licenses
+### Required Programs and Licenses
 
-##### 1. PIX4Dmapper, photogrammetry software
+#### 1. PIX4Dmapper, photogrammetry software
 
 `pybimscantools` associates with photogrammetry software, `PIX4Dmapper`. The user is required to have the photogrammetry software installed with a working license. The lastest version of `PIX4Dmapper` that `pybimscantools` supports is `4.5.6` due to the need of PIX4Dtagger integrated in this PIX4Dmapper specific version.
 The user is required to install PIX4Dmapper in a typical location, `C:\Program Files\Pix4Dmapper`. Once installed, extract the DB profile of PIX4Dmapper from the folder `PIX4D_DB_PROFILES` and place them in PIX4D database location.
@@ -242,9 +242,9 @@ The user is required to install PIX4Dmapper in a typical location, `C:\Program F
 - Usually under C:\Users\{YOUR-USER}\AppData\Local\pix4d
 ```
 
-##### 2. drone harmony, drone mission planning software
+#### 2. drone harmony, drone mission planning software
 
-`pybimscantools` also associates with `drone harmony` software to visualize representations of construction site and partially automate the mission planning process. The user is required to have a working license with `drone harmony` as well as the `API_KEY` from drone harmony.
+`pybimscantools` also associates with `drone harmony` software to visualize representations of construction site and partially automate the mission planning process. The user is required to have a working license with `drone harmony` as well as the `API_KEY` from drone harmony. `API_KEY` is required to be entered in the program (e.g. `test.py`).
 
 ------------------------------------------------------------------------
 
@@ -254,24 +254,24 @@ This software is licensed under the MIT License, except for dependencies that ha
 This software includes various third-party libraries with different licenses. Below is a list of key dependencies and their respective licenses:
 ```
 alphashape      MIT
-requests	    Apache-2.0
-urllib3	        MIT
-numpy	        BSD-3-Clause
-jpype1	        Apache-2.0
-matplotlib	    PSF
-scipy	        BSD-3-Clause
-termcolor	    MIT
-pandas	        BSD-3-Clause
-pyquaternion	MIT
-simplekml	    BSD-2-Clause
-openpyxl	    MIT
-Flask	        BSD-3-Clause
-piexif	        MIT
-laspy	        MIT
-ifcopenshell	LGPL-3.0
-shapely	        BSD-3-Clause
-lark	        MIT
-open3d	        MIT
-swissreframe	MIT
+requests        Apache-2.0
+urllib3         MIT
+numpy           BSD-3-Clause
+jpype1          Apache-2.0
+matplotlib      PSF
+scipy           BSD-3-Clause
+termcolor       MIT
+pandas          BSD-3-Clause
+pyquaternion    MIT
+simplekml       BSD-2-Clause
+openpyxl        MIT
+Flask           BSD-3-Clause
+piexif          MIT
+laspy           MIT
+ifcopenshell    LGPL-3.0
+shapely         BSD-3-Clause
+lark            MIT
+open3d          MIT
+swissreframe    MIT
 ```
 ------------------------------------------------------------------------
