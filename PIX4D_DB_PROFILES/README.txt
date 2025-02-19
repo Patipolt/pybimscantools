@@ -1,0 +1,2 @@
+- Extract the zipped file, you will see 2 folders (common, and Pix4D mapper)
+- Place the extracted folders under the PIX4D database location, usually under C:\Users\{YOUR-USER}\AppData\Local\pix4d
