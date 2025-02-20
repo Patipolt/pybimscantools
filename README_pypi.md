@@ -6,7 +6,7 @@ This package has been slightly modified from the version utilized by HumanTech p
 ------------------------------------------------------------------------
 
 ** Notice for python swissreframe package
-In order to use swissreframe package, JAVA is required on your system. Please follow the instructions below before installing the environment.
+In order to use swissreframe package, which is included in pybimscantools, JAVA is required on your system. Please follow the instructions below before installing the package.
 
 ## Python swissreframe
 
@@ -42,139 +42,15 @@ java -version
 ```
 ------------------------------------------------------------------------
 
+## How to use
 
-## Installation of environment
+Clone a repository from: https://github.com/Patipolt/pybimscantools.git
 
-You can create an environment for this software through either `miniforge for conda` or using `virtual environment` from python.
-
-### 1. Using miniforge for conda
-
-#### Installing miniforge for conda
-
-1. Install miniforge (conda and mamba) from https://github.com/conda-forge/miniforge.
-
-2. Run the Miniforge installation.
-
-3. Update and init conda:
-
-```
-conda update -n base conda
-conda init
-```
-
-#### Packaging with Conda and ``humantech_windows.yaml`` on Windows
-
-Create a new environment from the ``dependencies\humantech_windows.yaml`` file:
-
-```
-conda env create -n humantech -f dependencies\humantech_windows.yaml
-conda activate humantech
-```
-
-Creating a new environment ***humantech***, installing required packages and using Python 3.10.14:
-
-```
-conda create -n humantech requests urllib3 numpy jpype1 matplotlib scipy termcolor pandas pyquaternion simplekml openpyxl Flask piexif laspy ifcopenshell shapely alphashape lark python=3.10.14
-```
-
-Activating the environment.
-
-```
-conda activate humantech
-```
-
-#### The packages that are not available via conda need to be installed via pip
-
-Use the miniforge3 prompt. (make sure ``humantech`` is activated)
-
-On windows:
-
-```
-C:\Users\<YOUR_USERNAME>\miniforge3\envs\humantech\Scripts\pip install open3d swissreframe
-```
-
-On linux:
-```
-/home/<YOUR_USERNAME>/miniforge3/envs/humantech/bin/pip install open3d swissreframe
-```
-
-You can use ``pip --version`` to locate pip within the ``humantech`` environment.
-
-Updating all packages and dependencies:
-
-```
-conda update --all
-```
-
-List all packages installed in the environment:
-
-```
-conda list
-```
-
-### OR
-### 2. Using virtual environment from python (venv)
-
-Creating a virtual environment in the project folder:
-
-```
-python.exe -m venv venv
-``` 
-
-Activate the virtual environment:
-
-```
-cd venv/Scripts/
-activate
-```
-
-Update `pip`:
-
-```
-python.exe -m pip install --upgrade pip
-```
-
-Make sure you have `setuptools` and `wheel` installed on your system:
-
-```
-python.exe -m pip install setuptools wheel
-```
-
-Update `setuptools` and `wheel`:
-
-```
-python.exe -m pip install --upgrade setuptools wheel
-```
-
-#### Required Packages
-
-There are 2 options for installing the required packages. You can `install the pybimscantools package directly from the pypi server` or `package the pybimscantools as a package yourself and install its wheel`.
-
-##### 2.1 Installing pybimscantools directly from pypi server
+Install `pybimscantools` package
 
 ```
 python.exe -m pip install pybimscantools
 ```
-
-##### OR
-##### 2.2 Packaging the pybimscantools as a package and install its wheel
-
-Since all these files `requirements.txt` `setup.py` `MANIFEST.in` `pyproject.toml` required for packaging a wheel are provided, you can package pybimscantools by running below command in the project folder `pybimscantools`.
-
-```
-python.exe setup.py sdist bdist_wheel
-```
-
-This will create a `dist/` folder containing a `.whl` file and a `.tar.gz` source distribution.
-
-Install the wheel using pip:
-
-```
-python.exe -m pip install dist/pybimscantools-0.1-py3-none-any.whl
-```
-------------------------------------------------------------------------
-
-## How to use
 
 Once you have set up the environment ready for the software, there are some requirements below in order to use `pybimscantools` at its fully functioning state. After that, you can follow the steps in `test.py`.
 
@@ -238,7 +114,7 @@ The user is required to install PIX4Dmapper in a typical location, `C:\Program F
 
 ```
 - Extract the zipped file, you will see 2 folders (common, and Pix4D mapper)
-- Place the extracted folders under the PIX4D database location.
+- Place the extracted folders under the PIX4D database location
 - Usually under C:\Users\{YOUR-USER}\AppData\Local\pix4d
 ```
 
