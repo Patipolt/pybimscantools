@@ -8,7 +8,7 @@ with open('README_pypi.md', 'r', encoding='utf-8') as fh:
 
 setup(
     name='pybimscantools',
-    version='0.1.0.post1',
+    version='0.1.0.post2',
     packages=find_packages(),  # Automatically find and include all packages (i.e., directories with __init__.py)
     include_package_data=True,  # Include non-Python files (e.g., ifcconvert.exe)
     package_data={
