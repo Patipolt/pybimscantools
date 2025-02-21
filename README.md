@@ -3,16 +3,22 @@
 A python package for automated data acquisition pipeline.
 This package has been slightly modified from the version utilized by HumanTech project to generalize the use of the software.
 
+## Data
+
+There is provided data available for download at: https://drive.google.com/file/d/1X82WFLAPbr41ybdGQwJHutIHWmgMMlVG/view?usp=sharing.
+This provided data is processed by `pybimscantools` as an example to demonstrate automated data acquisition and its pre-processing pipeline. The users are required to change data in order to perform automated data acquisition and its related pre-processing tasks of project of their choices.
+
 ------------------------------------------------------------------------
 
-** Notice for python swissreframe package
-In order to use swissreframe package, JAVA is required on your system. Please follow the instructions below before installing the environment.
 
 ## Python swissreframe
 
+** Notice for python `swissreframe` package
+In order to use `swissreframe` package, which is included in pybimscantools, `JAVA` is required on your system. Please follow the instructions below before installing the environment.
+
 ### Windows
 
-In windows you need to set an environment variable called **JAVA_HOME** to a 64 bit version of Java. You need to install `Java` if it is not already installed.
+In windows you need to set an environment variable called **JAVA_HOME** to a 64 bit version of Java. You need to install `Java`, if it is not already installed.
 
 | Description    | Value                                  |
 |----------------|----------------------------------------|
@@ -177,11 +183,6 @@ python.exe -m pip install dist/pybimscantools-0.1-py3-none-any.whl
 ## How to use
 
 Once you have set up the environment ready for the software, there are some requirements below in order to use `pybimscantools` at its fully functioning state. After that, you can follow the steps in `test.py`.
-
-### Data
-
-There is provided data available for download at: https://drive.google.com/file/d/1X82WFLAPbr41ybdGQwJHutIHWmgMMlVG/view?usp=sharing.
-This provided data is processed by `pybimscantools` as an example to demonstrate automated data acquisition and its pre-processing pipeline. The users are required to change data in order to perform automated data acquisition and its related pre-processing tasks of their projects.
 
 ### Folder Structure
 
