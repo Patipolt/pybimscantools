@@ -18,7 +18,7 @@ In order to use `swissreframe` package, which is included in pybimscantools, `JA
 
 ### Windows
 
-In windows you need to set an environment variable called **JAVA_HOME** to a 64 bit version of Java. You need to install `Java`, if it is not already installed.
+In windows you need to set an environment variable in system variables called **JAVA_HOME** to a 64 bit version of Java. You need to install `Java`, if it is not already installed.
 
 | Description    | Value                                  |
 |----------------|----------------------------------------|
