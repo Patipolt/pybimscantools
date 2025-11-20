@@ -1,3 +1,19 @@
+""" pybimscantools test file offers a comprehensive example of how to utilize various modules within the pybimscantools package.
+It demonstrates the preparation and evaluation processes for a BIM and drone scanning project.
+However, the steps arranged in this file are not necessarily sequential.
+Users can choose to run specific sections or rearrange them based on their project requirements.
+The preparation process includes:
+1. IFC-to-collada conversion
+2. IFC-to-polygon extraction algorithm
+3. Polygon (CoordinateModel) handling and transformation
+4. Drone Harmony API interaction
+The evaluation process includes:
+1. Markers handling and backend interaction
+2. Transformation matrix extraction from points
+3. Triggering PIX4D CLI for automated point cloud processing
+4. Transforming point cloud to IFC coordinate system
+5. Embedding pose information in EXIF and rendering depth images """
+
 ###############################################################################################################################
 ################################################# Preparation Process #########################################################
 ###############################################################################################################################
@@ -34,7 +50,7 @@ path = os.path.join(os.path.join(os.path.dirname(os.getcwd()), "Data", project_n
 IFC-to-collada conversion
 ******************************* """
 
-""" This step is optional to convert the IFC file to collada format.
+""" This module is optional to convert the IFC file to collada format.
 The collada file will be created under the models/collada folder. """
 
 Start_Time = time.time()
@@ -54,15 +70,19 @@ print(
 IFC-to-polygon extraction algorithm
 ******************************* """
 
-""" This step is to create a polygonal representation of construction site from the IFC file.
+""" This module is to create a polygonal representation of construction site from the IFC file.
 
-Set up the algorithm
 Parameters explanation:
 resolution: groups identical IfcSlabs at different heights into single layers
 z_span: defines the height of the scanning window
 z_resolution: specifies the vertical step size of the scanning window
 alpha: controls the detection of non-convex shapes
-threshold: sets the minimum area difference between scanning windows to identify new layers """
+threshold: sets the minimum area difference between scanning windows to identify new layers 
+
+These parameters can be adjusted based on the specific IFC file and desired level of detail.
+The algorithm might fail for some IFC files due to the complexity of the IFC schema and the variety of ways buildings can be modeled.
+Adjusting these parameters can help to better capture the building structure.
+Therefore, it is recommended to visualise the IFC file and the extracted slabs first to get an idea of the building structure before running the full scanning algorithm."""
 
 alg = isococ.ISOCoC(resolution=0.01,
                     z_span=30,
@@ -72,7 +92,8 @@ alg = isococ.ISOCoC(resolution=0.01,
 
 ### Read the IFC file, extract and show the ifc slabs
 """ This step is to visualise the IFC file and all slabs in the range
-to get an idea of the building structure. """
+to get an idea of the building structure. 
+Closing the visualisation window will continue to the next step."""
 
 file_name = "KSA_FAS_51_XX_200_43_240123.ifc"       # put in the name of the IFC file
 (all_slab_vertices, slab_plot, all_slab_edges) = alg.read_from_file(
@@ -99,11 +120,11 @@ union_shape: cl.CoordinateList | cm.CoordinateModel = alg.scan_through(os.path.j
 Polygon (CoordinateModel)
 ******************************* """
 
-"""This step is to handle the polygonal representation of the construction site in the right coordinate system.
-# Usually the IFC file (the consstruction model) is in the project coordinate system(local construction site coordinate system).
-# Therefore, the polygonal representation of the construction site extracted from the algorithm is as well in the project coordinate system.
-# However, the extracted polygonal representation needs to be visualized in the drone harmony software, which is working in the global coordinate system.
-# Therefore, the polygonal representation needs to be transformed from the project coordinate system to the global coordinate system. """
+"""This module is to handle the polygonal representation of the construction site in the right coordinate system.
+Usually the IFC file (the construction model) is in the project coordinate system(local construction site coordinate system).
+Therefore, the polygonal representation of the construction site extracted from the algorithm is as well in the project coordinate system.
+However, the extracted polygonal representation needs to be visualized in the drone harmony software, which is working in the global coordinate system.
+Therefore, the polygonal representation needs to be transformed from the project coordinate system to the global coordinate system. """
 
 ### Since the height of the polygon is defined by Z values already, we can set all the heights to 0 for google earth.
 union_shape_google_earth = union_shape.copy()
@@ -121,7 +142,7 @@ union_shape.transform_from_lv95_to_google_earth()
 union_shape_google_earth.apply_transformation_matrix(T)
 union_shape_google_earth.transform_from_lv95_to_google_earth()
 
-### Create a KML file for Google Earth visualization
+### Create a KML file for Google Earth visualization as an optional step
 ### The KML file will be created under the models/kml folder.
 union_shape_google_earth.create_kml_for_google_earth(path, file_name.split(".")[0] + ".kml")
 
@@ -131,11 +152,13 @@ union_shape_google_earth.create_kml_for_google_earth(path, file_name.split(".")[
 Drone Harmony
 ******************************* """
 
-""" This step is to upload the polygonal representation of the construction site to the drone harmony software.
+""" This module is to upload the polygonal representation of the construction site to the drone harmony software.
 The user can use drone harmony web application to plan the drone flight mission for the construction site afterwards. 
 The user needs to have an account and API key to use the drone harmony API.
-Therefore, this section is commented out by default. 
-Please refer to the drone harmony API documentation for more information about how to get these parameters. """
+Therefore, this section is commented out by default.
+API_KEY and CLIENT_USER_ID need to be filled in by the user in order to use the drone harmony API.
+Please contact DroneHarmony and refer to the drone harmony API documentation for more information 
+about how to get these parameters. """
 
 # ### Set up the Drone Harmony API
 # API_KEY = "" # put in your API key from drone harmony
@@ -154,6 +177,27 @@ Please refer to the drone harmony API documentation for more information about h
 ################################################# Evaluation Process ##########################################################
 ###############################################################################################################################
 
+""" *******************************
+Markers (already wrt IFC)
+******************************* """
+
+""" This module is dealing with markers that are applied on the construction site.
+Usually the markers(CWA 18046:2023) are applied on the construction site such that the images taken by the drone can be georeferenced.
+Meaning that post-processing steps such as point cloud generation, processing these images and so on will result in the coordinates of the markers.
+In our case, due to the use of PIX4Dtagger in our pipeline, chili tags were required for the point cloud processing with georeferences.
+Therefore, chili tags were applied in a small consistent distance with respect to the the CWA markers on every markers.
+Typically, a surveyor is required to measure the markers(in this case, CWA) within the project coordinate system.
+This data is then put in the file markers_ifc.xlsx under the markers folder. If there are other tags required for the project, for example, 
+other robots that are using different kinds of tags, different tags can also be applied on the CWA markers like in our case with chili tags.
+The relative corners of the chili tags are then put in the file relative_corners_tag_chilli.xlsx under the markers folder. 
+This is the distance with respect to the CWA marker. These two files are then used to create px4tagger.txt file which is used in the PIX4Dtagger software
+for automatic point cloud generation with georeferences. Moreover, the files will also be uploaded to the central server(currently https://humantech.dev/) so that
+every partner can access the information of the CWA markers and tags of their choices for localization. 
+
+The current server used is https://humantech.dev/. The user needs to change this server to their own server if needed.
+This is to visualise the possibilities and different functionalities of the Markers Backend API.
+Please contact CatendaHub or other backend server of your choices and modify the parameters in markersbackend.py in order to use the Markers Backend API."""
+
 """
 KSA (Kantonsspital Aarau)
 LV95  : 2'647'002.81, 1'248'819.15
@@ -163,24 +207,6 @@ Notes : Markers were only applied sparsly on the two top huts of the building. T
         PIX4Dtagger failed. The mission was executed with RTK GPS and the marker information is only used to to get estimate
         the transformation between the RTK GPS and the IFC coordinate system.
 """
-
-
-""" *******************************
-Markers (already wrt IFC)
-******************************* """
-
-""" This step is dealing with markers that are applied on the construction site.
-Usually the markers(CWA 18046:2023) are applied on the construction site such that the images taken by the drone can be georeferenced.
-Meaning that post-processing steps such as point cloud generation and so on, processing these images will result in the coordinates of the markers.
-In our case, due to the use of PIX4Dtagger in our pipeline, chili tags were required for the point cloud processing with georeferences.
-Therefore, chili tags were applied in a small consistent distance with respect to the the CWA markers on every markers.
-Typically, a surveyor is required to measure the markers(in this case, CWA) within the project coordinate system.
-This data is then put in the file markers_ifc.xlsx under the markers folder. If there are other tags required for the project, for example, 
-other robots that are using different kinds of tags, different tags can also be applied on the CWA markers like in our case with chili tags.
-The relative corners of the chili tags are then put in the file relative_corners_tag_chilli.xlsx under the markers folder. 
-This is the distance with respect to the CWA marker. These two files are then used to create px4tagger.txt file which is used in the PIX4Dtagger software
-for automatic point cloud generation with georeferences. Moreover, the files will also be uploaded to the central server(currently https://humantech.dev/) so that
-every partner can access the information of the CWA markers and tags of their choices for localization. """
 
 ### Convert markers from *.xlsx to *.json and *.json to pandas dataframe
 markers.convert_markers_from_xlsx_to_json(path)
@@ -239,13 +265,15 @@ trafo.convert_transformation_matrix_to_json(path, T, "T_rtk_to_ifc.json")
 Triggering PIX4D CLI
 ******************************* """
 
-""" This step is to trigger the PIX4D CLI for automated point cloud processing.
+""" This module is to trigger the PIX4D CLI for automated point cloud processing.
 Since this project processes point cloud in the RTK GPS coordinates, PIX4Dtagger is not used in this case.
 However, if the images taken by the drone are good enough for PIX4Dtagger to detect chili tags, the user can use the PIX4Dtagger for automating georeferencing of the point cloud.
-In that case,, the resulting point cloud will already be in the project coordinate system and the transformation matrix will not be needed.
+In that case, the resulting point cloud will already be in the project coordinate system and the transformation matrix will not be needed.
 You need to follow the steps in the README.MD file in order to set up the PIX4D and its requirements on your computer.
 After PIX4Dmapper has finished processing the point cloud, it will create some files under pix4d/project_name/1_initial/params folder and the point cloud file under
 pix4d/project_name/2_densification/point_cloud folder. Two text files and point cloud file are needed to be copied to the dedicated locations in the next step. """
+
+""" When PIX4D finishes processing the project, closing the PIX4D window will continue to the next step. """
 
 """ This step requires PIX4D 4.5.6 version to be installed and a valid license.
 Therefore, this section is commented out by default. """
@@ -280,7 +308,7 @@ while not os.path.exists(os.path.join(path, "images", "calibrated_external_camer
 Transform Point Cloud to IFC
 ******************************* """
 
-""" This step is to transform the point cloud from the RTK GPS coordinate system to the project coordinate system.
+""" This module is to transform the point cloud from the RTK GPS coordinate system to the project coordinate system.
 If the point cloud is already in the project coordinate system, this step is not needed.
 This step will create a new point cloud file under pointclouds/transformed folder. """
 
@@ -294,7 +322,7 @@ pc.transform_pointcloud(path, file_name_pc, T)
 Embed Pose Information in EXIF and Render Depth Images
 ******************************* """
 
-""" This step is to embed the pose information in the images and render the depth images.
+""" This module is to embed the pose information in the images and render the depth images.
 This step will create pose embedded images under images/pose_embedded folder and depth images under images/depth_rendered folder. """
 
 ### embed pose information
@@ -313,7 +341,7 @@ dr.render_depth_images(img_filename_list, img_transformation_list, path, file_na
 # BIMxD Collaboration (Automatic upload)
 ******************************* """
 
-""" This step is to upload the project results to BIMxD collaboration platform. 
+""" This module is to upload the project results to BIMxD collaboration platform. 
 The user is required to have an account an access to a BIMxD project.
 The code below shows the possibilities and different functionalities of the BIMxD API.
 However, Some parameters inside bimxd.py are modified due to confidentiality reasons.
